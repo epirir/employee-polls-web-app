@@ -1,14 +1,12 @@
 import { connect } from "react-redux";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { handleAddAnswer } from "../actions/questions";
 import "./PollPage.css";
+import Error404 from "./NotFound404";
 
 const PollPage = ({ dispatch, authedUser, question, author }) => {
-  const navigate = useNavigate();
-  const refRoute404 = "/404";
-
   if (!authedUser || !question || !author) {
-    return <Navigate to={refRoute404} />;
+    return <Error404 />;
   }
 
   const selectedOptionOne = question.optionOne.votes.includes(authedUser.id);
@@ -18,13 +16,11 @@ const PollPage = ({ dispatch, authedUser, question, author }) => {
   const onClickOptionOne = (e) => {
     e.preventDefault();
     dispatch(handleAddAnswer(question.id, "optionOne"));
-    navigate("/");
   };
 
   const onClickOptionTwo = (e) => {
     e.preventDefault();
     dispatch(handleAddAnswer(question.id, "optionTwo"));
-    navigate("/");
   };
 
   const getPercentage = (option, question) => {
@@ -107,9 +103,10 @@ const mapStateToProps = ({ authedUser, users, questions }) => {
     const author = Object.values(users).find(
       (user) => user.id === question.author
     );
+
     return { authedUser, question, author };
   } catch (e) {
-    return <Navigate to="/404" />;
+    return <Error404 />;
   }
 };
 

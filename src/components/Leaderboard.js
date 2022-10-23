@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 
-const Leaderboard = ({ users }) => {
+const Leaderboard = ({ users, questions }) => {
   return (
     <div>
       <h1 className="text-3xl text-center font-bold mt-9">Leaderboard</h1>
@@ -30,7 +30,10 @@ const Leaderboard = ({ users }) => {
                 {Object.keys(user.answers).length}
               </td>
               <td className="border-b border-slate-100 dark:border-slate-300 p-4 pl-8">
-                {user.questions.length}
+                {
+                  questions.filter((question) => question.author === user.id)
+                    .length
+                }
               </td>
             </tr>
           ))}
@@ -40,10 +43,15 @@ const Leaderboard = ({ users }) => {
   );
 };
 
-const mapStateToProps = ({ users }) => ({
+const mapStateToProps = ({ users, questions }) => ({
   users: Object.values(users).sort(
-    (a, b) => Object.keys(b.answers).length - Object.keys(a.answers).length
+    (a, b) =>
+      Object.keys(b.questions).length +
+      Object.keys(b.answers).length -
+      (Object.keys(a.questions).length + Object.keys(a.answers).length)
   ),
+
+  questions: Object.values(questions),
 });
 
 export default connect(mapStateToProps)(Leaderboard);

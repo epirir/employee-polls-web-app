@@ -21,6 +21,7 @@ function App({ dispatch, loggedIn }) {
     <div className="container mx-auto py-4 ">
       {loggedIn && <TopNav />}
       <Routes>
+        <Route path="*" element={<Error404 />} />
         <Route path="/login" exact element={<Login />} />
         <Route
           path="/"
@@ -48,7 +49,7 @@ function App({ dispatch, loggedIn }) {
           }
         />
         <Route
-          path="/new"
+          path="/add"
           exact
           element={
             <PrivateRoute>
@@ -56,7 +57,6 @@ function App({ dispatch, loggedIn }) {
             </PrivateRoute>
           }
         />
-        <Route path="/404" exact element={<Error404 />} />
       </Routes>
     </div>
   );
