@@ -2,9 +2,18 @@ import { connect } from "react-redux";
 import { handleAddAnswer } from "../actions/questions";
 import "./PollPage.css";
 import Error404 from "./NotFound404";
+import { useParams } from "react-router-dom";
 
-const PollPage = ({ dispatch, authedUser, question, author }) => {
-  if (!authedUser || !question || !author) {
+const PollPage = ({ dispatch, authedUser, questions, users }) => {
+  const questionId = useParams().question_id;
+
+  const question = questions[questionId];
+
+  const author = Object.values(users).find(
+    (user) => user.id === question?.author
+  );
+
+  if (!authedUser || question === undefined || author === undefined) {
     return <Error404 />;
   }
 
@@ -95,20 +104,7 @@ const PollPage = ({ dispatch, authedUser, question, author }) => {
 };
 
 const mapStateToProps = ({ authedUser, users, questions }) => {
-  try {
-    const queryParams = new URLSearchParams(window.location.search);
-    const questionId = queryParams.get("id");
-
-    const question = questions[questionId];
-
-    const author = Object.values(users).find(
-      (user) => user.id === question.author
-    );
-
-    return { authedUser, question, author };
-  } catch (e) {
-    return <Error404 />;
-  }
+  return { authedUser, questions, users };
 };
 
 export default connect(mapStateToProps)(PollPage);

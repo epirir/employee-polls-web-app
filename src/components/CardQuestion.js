@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 const CardQuestion = ({ question, author }) => {
-  const hrefRoute = `questions?id=${question.id}`;
+  const hrefRoute = `questions/${question.id}`;
   const questionDate = new Date(question.timestamp).toDateString();
 
   return (
