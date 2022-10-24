@@ -1,5 +1,4 @@
 import { connect } from "react-redux";
-import { useParams } from "react-router-dom";
 import { handleAddAnswer } from "../actions/questions";
 import "./PollPage.css";
 import Error404 from "./NotFound404";
@@ -51,7 +50,7 @@ const PollPage = ({ dispatch, authedUser, question, author }) => {
           onClick={onClickOptionOne}
           disabled={hasSelected}
           className={`p-2 rounded-xl bg-zinc-100 hover:shadow-xl transition
-            ${selectedOptionOne ? "bg-lime-400" : ""}`}
+              ${selectedOptionOne ? "bg-lime-400" : ""}`}
         >
           <div className={selectedOptionOne ? "chosen" : ""}>
             <p className="font-bold mb-2">{question.optionOne.text}</p>
@@ -97,9 +96,11 @@ const PollPage = ({ dispatch, authedUser, question, author }) => {
 
 const mapStateToProps = ({ authedUser, users, questions }) => {
   try {
-    const question = Object.values(questions).find(
-      (question) => question.id === useParams().id
-    );
+    const queryParams = new URLSearchParams(window.location.search);
+    const questionId = queryParams.get("id");
+
+    const question = questions[questionId];
+
     const author = Object.values(users).find(
       (user) => user.id === question.author
     );

@@ -41,7 +41,7 @@ function App({ dispatch, loggedIn }) {
           }
         />
         <Route
-          path="/questions/:id"
+          path="/questions"
           element={
             <PrivateRoute>
               <PollPage />
